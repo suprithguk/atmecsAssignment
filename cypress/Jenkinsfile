@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    /* Uncomment the following block to schedule the Jenkins job for nightly runs to run 7:00 pm every day
+    triggers {
+        cron ("0 19 * * *")
+    }. */
+    stages {
+        stage('input1') {
+            steps {
+                git branch: 'main',
+                url: 'https://github.com/suprithguk/atmecsAssignment'
+                dir ("test1output") {
+
+                    npx cypress run --spec "cypress/e2e/amazon/search.cy.ts"
+                }
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline execution complete.'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+        success {
+            echo 'Pipeline succeeded.'
+        }
+    }
+}
